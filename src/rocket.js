@@ -54,8 +54,8 @@ gltfLoader.load('/models/Rocket/rocket1.glb', function (gltf) {
     rocket = gltf.scene;
 
     scene.add(rocket);
-    gltf.scene.scale.set(15, 15, 15)
-    gltf.scene.position.set(0, -20, -2)
+    gltf.scene.scale.set(10, 10, 10)
+    gltf.scene.position.set(0, 0, -2)
 
 
 }, undefined, function (error) {
@@ -103,7 +103,7 @@ scene.add(cameraGroup)
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.z = 100
+camera.position.z = 180
 cameraGroup.add(camera)
 
 /**
@@ -277,9 +277,9 @@ const createFlyingParticles = () => {
 class Particle {
     constructor() {
         this.isFlying = false;
-        var scale = 6 + Math.random() * 5;
-        var nLines = 3 + Math.floor(Math.random() * 5);
-        var nRows = 3 + Math.floor(Math.random() * 5);
+        var scale = 5 + Math.random() * 5;
+        var nLines = 10 + Math.floor(Math.random() * 10);
+        var nRows = 10 + Math.floor(Math.random() * 10);
         this.geometry = new THREE.SphereGeometry(scale, nLines, nRows);
 
         this.material = new THREE.MeshLambertMaterial({
@@ -311,16 +311,16 @@ function recycleParticle(p) {
 function flyParticle(p) {
     var targetPosX, targetPosY, targetSpeed, targetColor;
     p.mesh.material.opacity = 1;
-    p.mesh.position.x = -1000 + Math.random() * 2000;
-    p.mesh.position.y = 100 + Math.random() * 2000;
-    p.mesh.position.z = -1000 + Math.random() * 1500;
+    p.mesh.position.x = -800 + Math.random() * 2000;
+    p.mesh.position.y = 200 + Math.random() * 2000;
+    p.mesh.position.z = -800+ Math.random() * 1500;
 
-    var s = Math.random() * 0.2;
+    var s = Math.random() * 0.4;
     p.mesh.scale.set(s, s, s);
 
     targetPosX = 0;
     targetPosY = -p.mesh.position.y - 2500;
-    targetSpeed = 1 + Math.random() *2;
+    targetSpeed = 8 + Math.random() * 8;
     targetColor = 0xe3e3e3;
 
     gsap.to(p.mesh.position,{
@@ -342,15 +342,15 @@ let cloudTargetPosX,
 const dropParticle = (p, rocket) => {
     p.mesh.material.opacity = 1;
     p.mesh.position.x = 0;
-    p.mesh.position.y = rocket.position.y;
+    p.mesh.position.y = rocket.position.y ;
     p.mesh.position.z = 0;
 
 
     var s = Math.random(0.2) + 0.35;
-    p.mesh.scale.set(0.2 * s, 0.2 * s, 0.2 * s);
+    p.mesh.scale.set(0.4 * s, 0.4 * s, 0.4 * s);
     cloudTargetPosX = 0;
-    cloudTargetPosY = rocket.position.y - 60;
-    cloudTargetSpeed = 0.4 + Math.random() * 0.3;
+    cloudTargetPosY = rocket.position.y - 90;
+    cloudTargetSpeed = 0.8 + Math.random() * 0.6;
     cloudTargetColor = 0xa3a3a3;
 
     gsap.to(p.mesh.position,  {
@@ -364,9 +364,9 @@ const dropParticle = (p, rocket) => {
 
     gsap.to(p.mesh.scale,  {
         duration:cloudTargetSpeed * cloudSlowMoFactor,
-        x: s * 1,
-        y: s * 1,
-        z: s * 1,
+        x: s * 1.6,
+        y: s * 1.6,
+        z: s * 1.6,
         ease: 'ease',
 
     });
