@@ -9,7 +9,7 @@ const renderer = new THREE.WebGLRenderer({
 document.body.appendChild(renderer.domElement);
 
 const camera = new THREE.PerspectiveCamera(70);
-camera.position.set(-4.0, -5.5, 8.0);
+camera.position.set(-4.0, -5.5, 4.0);
 camera.lookAt(0, 0, 0);
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -18,10 +18,10 @@ controls.enableDamping = true;
 const cloud = new Cloud({
   cloudSize: new THREE.Vector3(0.5, 1.0, 0.5),
   sunPosition: new THREE.Vector3(1.0, 2.0, 1.0),
-  cloudColor: new THREE.Color(0x8aa7b5),
-  skyColor: new THREE.Color(0xbacdd6),
+  cloudColor: new THREE.Color(0xa89f9e),
+  skyColor: new THREE.Color(0xc4c4c4),
   cloudSteps: 48,
-  shadowSteps: 8,
+  shadowSteps: 3,
   cloudLength: 16,
   shadowLength: 2,
   noise: false
@@ -42,22 +42,22 @@ window.addEventListener("resize", handleResize);
 let lastPolarAngle = 0;
 let lastAzimuthalAngle = 0;
 
-// controls.addEventListener("change", () => {
-//   const polarAngle = controls.getPolarAngle();
-//   const azimuthalAngle = controls.getAzimuthalAngle();
+controls.addEventListener("change", () => {
+  const polarAngle = controls.getPolarAngle();
+  const azimuthalAngle = controls.getAzimuthalAngle();
 
-//   const rotationDelta =
-//     Math.abs(polarAngle - lastPolarAngle) +
-//     Math.abs(azimuthalAngle - lastAzimuthalAngle);
-//   cloud.regress = rotationDelta > 0.0002;
+  const rotationDelta =
+    Math.abs(polarAngle - lastPolarAngle) +
+    Math.abs(azimuthalAngle - lastAzimuthalAngle);
+  cloud.regress = rotationDelta > 0.0002;
 
-//   lastPolarAngle = polarAngle;
-//   lastAzimuthalAngle = azimuthalAngle;
+  lastPolarAngle = polarAngle;
+  lastAzimuthalAngle = azimuthalAngle;
 
-//   cloud.render(renderer, camera);
-// });
+  cloud.render(renderer, camera);
+});
 
 renderer.setAnimationLoop((time) => {
   controls.update();
-  cloud.time = time / 1000;
+  cloud.time = time / 100;
 });
