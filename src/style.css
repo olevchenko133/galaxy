@@ -4,11 +4,23 @@
 	margin: 0;
 	padding: 0;
 }
-
+canvas {
+	/* display: none; */
+}
 html {
 	background-color: #020228;
 }
-
+#next {
+	position: absolute;
+	top:70%;
+	left: 50%;
+transform: translate(-50%, -50%);
+	z-index: 99999;
+	width: 100px;
+	height: 20px;
+	background-color: red;
+	cursor: pointer;
+}
 /* .webgl {
 	position: fixed;
 	top: 0;
