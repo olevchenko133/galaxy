@@ -55,7 +55,7 @@ gltfLoader.load('/models/Rocket/rocket1.glb', function (gltf) {
 
     scene.add(rocket);
     gltf.scene.scale.set(15, 15, 15)
-    gltf.scene.position.set(0, -1, 2)
+    gltf.scene.position.set(0, -20, -2)
 
 
 }, undefined, function (error) {
@@ -132,8 +132,6 @@ window.addEventListener('mousemove', (event) => {
 
 
 
-const targetRocketPosition = 3;
-const animationDuration = 2000;
 /**
  * Animate
  */
@@ -161,21 +159,22 @@ const tick = () => {
 
     if (rocket) {
         rocket.rotation.y += 0.01;
+
         setTimeout(() => {
             createSmoke(rocket);
-        }, 1000);
-        if (rocket.position.y < 130) {
-            rocket.position.y += 0.005;
-            // rocket.position.x = Math.random() * Math.PI * 0.5;
-            // rocket.rotation.x = Math.random() * Math.sin(1) * 0.04;
-            // rocket.rotation.z = Math.random() * Math.sin(1) * 0.04;
-            // rocket.position.z = Math.random() * Math.PI * 0.5;
+        }, 500);
+        if (rocket.position.y < 6) {
+            rocket.position.y += 0.06;
+            rocket.position.x = Math.random() * Math.PI * 0.05;
+            rocket.rotation.x = Math.random() * Math.sin(1) * 0.004;
+            rocket.rotation.z = Math.random() * Math.sin(1) * 0.004;
+            rocket.position.z = Math.random() * Math.PI * 0.05;
         } else {
             // rocket.rotation.y += Math.sin(1) * 0.02;
         }
 
-        if (rocket.position.y > 350) {
-            rocket.position.y = -30;
+        if (rocket.position.y > 10) {
+            rocket.position.y = -10;
         }
 
         createFlyingParticles();
@@ -189,6 +188,72 @@ const tick = () => {
 }
 
 tick()
+
+let Colors = {
+    white: 0xffffff,
+    black: 0x000000,
+    red1: 0xd25138,
+    red2: 0xc2533b,
+    red3: 0xbf5139,
+    grey: 0xd9d1b9,
+    darkGrey: 0x4d4b54,
+    windowBlue: 0xaabbe3,
+    windowDarkBlue: 0x4a6e8a,
+    thrusterOrange: 0xfea036
+  };
+  
+let hemisphereLight, ambientLight, shadowLight, burnerLight;
+const createLights = () => {
+    // A hemisphere light is a gradient colored light;
+    // the first parameter is the sky color, the second parameter is the ground color,
+    // the third parameter is the intensity of the light
+    hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
+  
+    // an ambient light modifies the global color of a scene and makes the shadows softer
+    ambientLight = new THREE.AmbientLight(0xccb8b4, 0.6);
+    scene.add(ambientLight);
+  
+    // A directional light shines from a specific direction.
+    // It acts like the sun, that means that all the rays produced are parallel.
+    shadowLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  
+    // Set the direction of the light
+    shadowLight.position.set(150, 150, 0);
+    shadowLight.castShadow = true;
+  
+    // define the visible area of the projected shadow
+    shadowLight.shadow.camera.left = -800;
+    shadowLight.shadow.camera.right = 800;
+    shadowLight.shadow.camera.top = 800;
+    shadowLight.shadow.camera.bottom = -800;
+    shadowLight.shadow.camera.near = 1;
+    shadowLight.shadow.camera.far = 1200;
+  
+    // res of shadow
+    shadowLight.shadow.mapSize.width = 2048;
+    shadowLight.shadow.mapSize.height = 2048;
+  
+    burnerLight = new THREE.DirectionalLight(Colors.thrusterOrange, 0.75);
+  
+    burnerLight.position.set(0, -5, 0);
+    burnerLight.castShadow = true;
+  
+    burnerLight.shadow.camera.left = -100;
+    burnerLight.shadow.camera.right = 100;
+    shadowLight.shadow.camera.top = 100;
+    burnerLight.shadow.camera.bottom = -100;
+    burnerLight.shadow.camera.near = 1;
+    burnerLight.shadow.camera.far = 1000;
+  
+    burnerLight.shadow.mapSize.width = 2048;
+    burnerLight.shadow.mapSize.height = 2048;
+  
+    scene.add(hemisphereLight);
+    scene.add(shadowLight);
+    scene.add(burnerLight);
+    scene.add(ambientLight);
+  };
+  createLights();
 const getParticle = () => {
     let p;
     if (particleArray.length > 0) {
@@ -212,13 +277,14 @@ const createFlyingParticles = () => {
 class Particle {
     constructor() {
         this.isFlying = false;
-        var scale = 2 + Math.random() * 20;
+        var scale = 6 + Math.random() * 5;
         var nLines = 3 + Math.floor(Math.random() * 5);
         var nRows = 3 + Math.floor(Math.random() * 5);
         this.geometry = new THREE.SphereGeometry(scale, nLines, nRows);
 
         this.material = new THREE.MeshLambertMaterial({
             color: 0xe3e3e3,
+            // color: 0xc2533b,
             transparent: true
         });
 
@@ -253,11 +319,12 @@ function flyParticle(p) {
     p.mesh.scale.set(s, s, s);
 
     targetPosX = 0;
-    targetPosY = -p.mesh.position.y - 500;
-    targetSpeed = 1 + Math.random() * 2;
+    targetPosY = -p.mesh.position.y - 2500;
+    targetSpeed = 1 + Math.random() *2;
     targetColor = 0xe3e3e3;
 
-    gsap.to(p.mesh.position, targetSpeed * slowMoFactor, {
+    gsap.to(p.mesh.position,{
+        duration: targetSpeed * slowMoFactor, 
         x: targetPosX,
         y: targetPosY,
         ease: 'Power0.easeNone',
@@ -271,34 +338,36 @@ let cloudTargetPosX,
     cloudTargetPosY,
     cloudTargetSpeed,
     cloudTargetColor,
-    cloudSlowMoFactor = 1.5;
+    cloudSlowMoFactor = 0.65;
 const dropParticle = (p, rocket) => {
     p.mesh.material.opacity = 1;
     p.mesh.position.x = 0;
-    p.mesh.position.y = rocket.position.y - 80;
-    p.mesh.position.z = 2;
+    p.mesh.position.y = rocket.position.y;
+    p.mesh.position.z = 0;
 
-    // console.log(rocket.position.z)
+
     var s = Math.random(0.2) + 0.35;
-    p.mesh.scale.set(0.01 * s, 0.01 * s, 0.01 * s);
+    p.mesh.scale.set(0.2 * s, 0.2 * s, 0.2 * s);
     cloudTargetPosX = 0;
-    cloudTargetPosY = rocket.position.y - 20;
-    cloudTargetSpeed = 0.18 + Math.random() * 0.6;
+    cloudTargetPosY = rocket.position.y - 60;
+    cloudTargetSpeed = 0.4 + Math.random() * 0.3;
     cloudTargetColor = 0xa3a3a3;
 
-    gsap.to(p.mesh.position, 1 * cloudTargetSpeed * cloudSlowMoFactor, {
+    gsap.to(p.mesh.position,  {
+        duration:1.3 * cloudTargetSpeed * cloudSlowMoFactor,
         x: cloudTargetPosX,
         y: cloudTargetPosY,
-        ease: 'Power0.easeNone',
+        ease: 'none',
         onComplete: recycleParticle,
         onCompleteParams: [p]
     });
 
-    gsap.to(p.mesh.scale, cloudTargetSpeed * cloudSlowMoFactor, {
-        x: s * 1.8,
-        y: s * 1.8,
-        z: s * 1.8,
-        ease: 'Power0.easeNone',
+    gsap.to(p.mesh.scale,  {
+        duration:cloudTargetSpeed * cloudSlowMoFactor,
+        x: s * 1,
+        y: s * 1,
+        z: s * 1,
+        ease: 'ease',
 
     });
 };
