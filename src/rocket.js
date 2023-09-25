@@ -161,9 +161,7 @@ const tick = () => {
     if (rocket) {
         rocket.rotation.y += 0.01;
 
-        setTimeout(() => {
-            createSmoke(rocket);
-        }, 500);
+    
         if (rocket.position.y < 6) {
             rocket.position.y += 0.06;
             rocket.position.x = Math.random() * Math.PI * 0.05;
@@ -183,9 +181,12 @@ const tick = () => {
 
     // Render
     renderer.render(scene, camera)
+    // setTimeout(() => {
+    //     createSmoke(rocket);
+    //   }, 200);
 
     // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    requestAnimationFrame(tick)
 }
 
 tick()
@@ -254,7 +255,9 @@ const createLights = () => {
     scene.add(burnerLight);
     scene.add(ambientLight);
   };
+
   createLights();
+
 const getParticle = () => {
     let p;
     if (particleArray.length > 0) {
@@ -343,14 +346,14 @@ let cloudTargetPosX,
 const dropParticle = (p, rocket) => {
     p.mesh.material.opacity = 1;
     p.mesh.position.x = 0;
-    p.mesh.position.y = rocket.position.y ;
+    p.mesh.position.y = 5;
     p.mesh.position.z = 0;
 
 
     var s = Math.random(0.2) + 0.35;
     p.mesh.scale.set(0.4 * s, 0.4 * s, 0.4 * s);
     cloudTargetPosX = 0;
-    cloudTargetPosY = rocket.position.y - 90;
+    cloudTargetPosY = - 90;
     cloudTargetSpeed = 0.8 + Math.random() * 0.6;
     cloudTargetColor = 0xa3a3a3;
 
@@ -405,3 +408,4 @@ function render() {
 
 window.addEventListener( 'pointermove', onPointerMove );
 window.requestAnimationFrame(render);
+setInterval(createSmoke, 0);

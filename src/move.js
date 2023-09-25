@@ -163,21 +163,21 @@ const tick = () => {
     if (rocket) {
         rocket.rotation.y += 0.01;
 
-        setTimeout(() => {
-            createSmoke(rocket);
-        }, 500);
+   
    
         createFlyingParticles();
     }
-
+    setTimeout(() => {
+        createSmoke(rocket);
+    }, 0);
     // Render
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    requestAnimationFrame(tick)
 }
 
-tick()
+// tick()
 
 let Colors = {
     white: 0xffffff,

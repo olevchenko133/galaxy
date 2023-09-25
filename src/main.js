@@ -29,8 +29,8 @@ function init() {
   animate();
 };
 function initLights() {
-    const lightIntensity = 0.5;
-    const lightDistance = 150;
+    const lightIntensity = 1;
+    const lightDistance = 1250;
     var light;
   
     light = new THREE.PointLight(randomColor({ luminosity: 'light' }), lightIntensity, lightDistance);
