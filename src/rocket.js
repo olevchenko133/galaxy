@@ -55,7 +55,7 @@ gltfLoader.load('/models/Rocket/rocket1.glb', function (gltf) {
 
   
     scene.add(rocket);
-    gltf.scene.scale.set(10, 10, 10)
+    gltf.scene.scale.set(25, 25, 25)
     gltf.scene.position.set(0, 0, -2)
 
 
@@ -104,7 +104,7 @@ scene.add(cameraGroup)
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.z = 180
+camera.position.z = 300
 cameraGroup.add(camera)
 
 /**
@@ -169,7 +169,7 @@ const tick = () => {
             rocket.rotation.z = Math.random() * Math.sin(1) * 0.004;
             rocket.position.z = Math.random() * Math.PI * 0.05;
         } else {
-            // rocket.rotation.y += Math.sin(1) * 0.02;
+            rocket.rotation.y += Math.sin(1) * 0.02;
         }
 
         if (rocket.position.y > 10) {
@@ -212,7 +212,7 @@ const createLights = () => {
     hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
   
     // an ambient light modifies the global color of a scene and makes the shadows softer
-    ambientLight = new THREE.AmbientLight(0xccb8b4, 0.6);
+    ambientLight = new THREE.AmbientLight(0xfea036, 0.6);
     scene.add(ambientLight);
   
     // A directional light shines from a specific direction.
@@ -281,7 +281,7 @@ const createFlyingParticles = () => {
 class Particle {
     constructor() {
         this.isFlying = false;
-        var scale = 5 + Math.random() * 5;
+        var scale = 10 + Math.random() * 10;
         var nLines = 10 + Math.floor(Math.random() * 10);
         var nRows = 10 + Math.floor(Math.random() * 10);
         this.geometry = new THREE.SphereGeometry(scale, nLines, nRows);
@@ -353,7 +353,7 @@ const dropParticle = (p, rocket) => {
     var s = Math.random(0.2) + 0.35;
     p.mesh.scale.set(0.4 * s, 0.4 * s, 0.4 * s);
     cloudTargetPosX = 0;
-    cloudTargetPosY = - 90;
+    cloudTargetPosY = - 190;
     cloudTargetSpeed = 0.8 + Math.random() * 0.6;
     cloudTargetColor = 0xa3a3a3;
 
